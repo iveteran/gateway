@@ -1,0 +1,41 @@
+[server]
+	Host = "https://matrix.works/"
+	ListenAddress = "127.0.0.1"
+	ListenPort = 4000
+	LogFile = "fgw.log"
+
+	SysTimeForm = "2004-08-01 15:04:05"   # 时间转换格式
+	SysTimeFormShort = "2004-08-01"       # 日期转换格式
+
+	AppId = "fimatrix"
+	AppToken = "fimatrix2020"
+
+	SysTimeLocation = "Asia/Shanghai"
+	SignSecret = "20190612Shenzhen"
+	CookieSecret = "fimatrix"
+	UrlWhiteList = [
+    "/",
+    "/system",
+    "/user/login",
+    "/user/register",
+    "/user/register_confirm",
+    "/user/exists",
+    "/user/require_authcode",
+    "/user/verify_authcode",
+    "/user/reset_password",
+	]
+	UrlPrefixWhiteList = [
+    "/market",
+	]
+	[RouteTable]
+    "/user" = "http://localhost:4010/"
+    "/query" = "http://localhost:4020/"
+    "/uploading" = "http://localhost:4040/"
+    "/market" = "http://localhost:4050/"
+
+[redises]
+  [redises.default]
+		host = "127.0.0.1"
+		port = 6600
+		database = 0
+		isRunning = true
