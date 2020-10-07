@@ -15,3 +15,7 @@ http://localhost:4000/query
 
 curl -v -H "X-TOKEN:gegdTcBhMSAVMVeqzBcKoYIqlvQouEGh" -H "X-UID:9" \
 http://localhost:4000/uploading
+
+curl -v -H "X-UID: 9" -H "X-TOKEN: QXvSSMeDDkJwHsTUSewqIGluIKLzVwkk" \
+-F "files=@/tmp/stock_list.csv" -F "files=@/tmp/index_list.csv" \
+http://localhost:4000/uploading/upload
