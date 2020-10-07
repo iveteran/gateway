@@ -32,6 +32,9 @@
     "/query" = "http://localhost:4020/"
     "/uploading" = "http://localhost:4040/"
     "/market" = "http://localhost:4050/"
+    "/search" = "http://localhost:4060/"
+    "/filter" = "http://localhost:4060/"
+    "/data" = "http://localhost:4060/"
 
 [redises]
   [redises.default]
