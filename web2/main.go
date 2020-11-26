@@ -5,7 +5,7 @@ import (
 
 	"matrix.works/fmx-gateway/bootstrap"
 	"matrix.works/fmx-gateway/conf"
-	"matrix.works/fmx-gateway/solution2/route"
+	"matrix.works/fmx-gateway/web2/route"
 )
 
 const (
