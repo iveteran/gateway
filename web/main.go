@@ -17,11 +17,11 @@ const (
 )
 
 var (
-	Version string = "Unknown"
-	BuildNo string = "Unknown"
+	Version string = "unknown"
+	BuildNo string = "unknown"
 )
 
-var appTokens = map[string]string{"fimatrix": "fimatrix2020"}
+var appTokens = map[string]string{"fimatrix": "fimatrix2020"} // TODO: load from configure file
 
 func newApp() *bootstrap.FgwBootstrapper {
 	/// 初始化应用

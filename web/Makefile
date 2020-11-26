@@ -6,10 +6,10 @@ GOGET=$(GOCMD) get
 BINARY_NAME=fgw
 
 VERSION=1.0.1
-BUILD=`date +%FT%T%z`
+BUILD_NO=`date +%FT%T%z`
 
 # Setup the -Idflags options for go build here,interpolate the variable values
-LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildNo=${BUILD_NO}"
 
 all: build
 

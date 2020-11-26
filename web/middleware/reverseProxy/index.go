@@ -10,20 +10,16 @@ import (
 	"github.com/kataras/iris"
 
 	"matrix.works/fmx-gateway/bootstrap"
-	//"matrix.works/fmx-gateway/conf"
+	"matrix.works/fmx-gateway/conf"
 )
 
 func Configure(b *bootstrap.Bootstrapper) {
 	b.Use(func(ctx iris.Context) {
-		//proxyTable, dftTarget := conf.Cfg.Server.ReverseProxyTable
+		proxyTable := conf.Cfg.RouteTable
+		dftTarget := proxyTable["*"]
 		path := ctx.Path()
-		proxyTable := map[string]string{
-			"/query":  "http://127.0.0.1:4020",
-			"/market": "http://127.0.0.1:4050",
-		}
-		dftTarget := "http://127.0.0.1:4020"
 
-		log.Printf("#### path: %s\n", path)
+		log.Printf("Request path: %s\n", path)
 		target := matchProxyTarget(path, proxyTable)
 		if target != "" {
 			newProxy(target, ctx.ResponseWriter(), ctx.Request())
@@ -32,6 +28,7 @@ func Configure(b *bootstrap.Bootstrapper) {
 			newProxy(dftTarget, ctx.ResponseWriter(), ctx.Request())
 			ctx.Next()
 		} else {
+			log.Printf("Proxy table: Page not found")
 			ctx.StatusCode(404)
 			ctx.EndRequest()
 		}
