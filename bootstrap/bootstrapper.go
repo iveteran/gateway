@@ -1,6 +1,9 @@
 package bootstrap
 
 import (
+	"log"
+	"net/http"
+
 	"matrix.works/fmx-common/web/bootstrap"
 )
 
@@ -41,4 +44,13 @@ func New(
 
 func (this *FgwBootstrapper) ParseCommandLine() {
 	this.Bootstrapper.ParseCommandLine(this.CmdOpts.CommandOptions)
+}
+
+func (this *FgwBootstrapper) Serve(addr string) {
+	server := &http.Server{
+		Addr: addr,
+	}
+
+	log.Printf("Listening on %s...", addr)
+	server.ListenAndServe()
 }
