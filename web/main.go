@@ -50,6 +50,8 @@ func newApp() *bootstrap.FgwBootstrapper {
 }
 
 func main() {
+	fmt.Printf("注意：这个方案没有完成，暂时不可用, 请使用web2的方案, 本程序将退出!\n")
+	return
 	app := newApp()
 
 	address := fmt.Sprintf("%s:%d", conf.Cfg.Server.ListenAddress, conf.Cfg.Server.ListenPort)
