@@ -20,7 +20,7 @@ func proxyHandler(target string) RequestHandler {
 			log.Println(err)
 			return
 		}
-		log.Printf("%s redirect %s\n", r.URL.Path, target)
+		log.Printf("%s redirect to %s\n", r.URL.Path, target)
 
 		r.Header.Set("APP-ID", conf.Cfg.Server.AppId)
 		r.Header.Set("APP-TOKEN", conf.Cfg.Server.AppToken)

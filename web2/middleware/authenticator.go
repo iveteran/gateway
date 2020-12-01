@@ -17,24 +17,35 @@ func Authenticator(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		urlWhiteList := conf.Cfg.Server.UrlWhiteList
 		urlPrefixWhiteList := conf.Cfg.Server.UrlPrefixWhiteList
+		urlUserAccessList := conf.Cfg.Server.UrlUserAccessList
 		path := r.URL.Path
 		token := r.Header.Get("X-TOKEN")
 		uid, _ := strconv.Atoi(r.Header.Get("X-UID"))
 
-		if !cutils.ArrayContains(urlWhiteList, path) &&
-			!cutils.ArrayPrefixMatch(urlPrefixWhiteList, path) {
+		if CheckUrlDontNeedAuthenticateForUser(uint32(uid), path,
+			urlWhiteList, urlPrefixWhiteList, urlUserAccessList) {
+			next.ServeHTTP(w, r)
+		} else {
 			pass := authenticate(uint32(uid), token)
 			if pass {
 				log.Printf("%s authorize success", path)
 				next.ServeHTTP(w, r)
 			} else {
-				log.Printf("%s authorize failed", path)
+				log.Printf("%s authorize failed, uid: %d, token: %s", path, uid, token)
 				w.WriteHeader(401)
 			}
-		} else {
-			next.ServeHTTP(w, r)
 		}
 	})
+}
+
+func CheckUrlDontNeedAuthenticateForUser(
+	uid uint32, path string,
+	whiteList, urlPrefixWhiteList, urlUserAccessList []string,
+) bool {
+	// 1) path在白名单的可以直接访问，2) 访客可以访问非用户关联接口
+	return cutils.ArrayContains(whiteList, path) ||
+		cutils.ArrayPrefixMatch(urlPrefixWhiteList, path) ||
+		(uid == conf.Cfg.Server.GuestUserId && !cutils.ArrayPrefixMatch(urlUserAccessList, path))
 }
 
 func authenticate(uid uint32, token string) bool {

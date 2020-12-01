@@ -3,6 +3,7 @@
 	ListenAddress = "127.0.0.1"
 	ListenPort = 4000
 	LogFile = "fgw.log"
+	GuestUserId = 0
 
 	SysTimeForm = "2004-08-01 15:04:05"   # 时间转换格式
 	SysTimeFormShort = "2004-08-01"       # 日期转换格式
@@ -23,9 +24,14 @@
     "/user/require_authcode",
     "/user/verify_authcode",
     "/user/reset_password",
+    "/user/settings/languagelist",
 	]
 	UrlPrefixWhiteList = [
     "/market",
+	]
+	UrlUserAccessList = [
+    "/user",
+    "/uploading",
 	]
 	[RouteTable]
     "/user" = "http://localhost:4010/"

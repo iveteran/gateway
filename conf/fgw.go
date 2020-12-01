@@ -27,6 +27,7 @@ type ServerConfig struct {
 	ListenAddress      string
 	ListenPort         int
 	LogFile            string
+	GuestUserId        uint32
 	SysTimeForm        string
 	SysTimeFormShort   string
 	SysTimeLocation    string
@@ -36,6 +37,7 @@ type ServerConfig struct {
 	AppToken           string
 	UrlWhiteList       []string
 	UrlPrefixWhiteList []string
+	UrlUserAccessList  []string
 	BlackList          []string
 }
 
