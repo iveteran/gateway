@@ -44,5 +44,5 @@ func Setup(routeMap map[string]string) {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome!\r\n")
+	fmt.Fprintf(w, "Welcome to FMX Gateway!\r\n")
 }

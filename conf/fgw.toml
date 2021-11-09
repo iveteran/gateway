@@ -36,11 +36,16 @@
 	[RouteTable]
     "/user" = "http://localhost:4010/"
     "/query" = "http://localhost:4020/"
-    "/uploading" = "http://localhost:4040/"
-    "/market" = "http://localhost:4050/"
-    "/search" = "http://localhost:4060/"
-    "/filter" = "http://localhost:4060/"
+    "/uploading" = "http://localhost:4040/"    # user file uploader
+    "/market" = "http://localhost:4050/"       # data market
+    # "/search" = "http://localhost:4060/"
+    # "/filter" = "http://localhost:4060/"
     "/data" = "http://localhost:4060/"
+    "/extdata/index" = "http://localhost:4030/"  # data indexing receiver
+    "/extdata/db" = "http://localhost:4031/"   # database data indexer
+    "/extdata/api" = "http://localhost:4032/"  # 3rd api data indexer
+    "/extdata/ftx" = "http://localhost:4033/"  # file table extractor
+    "/extdata/ft" = "http://localhost:4034/"   # file table indexer
 
 [redises]
   [redises.default]
