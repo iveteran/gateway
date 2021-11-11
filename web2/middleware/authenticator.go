@@ -8,16 +8,16 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 
+	"matrix.works/fmx-common/datasource"
 	cutils "matrix.works/fmx-common/utils"
 	"matrix.works/fmx-gateway/conf"
-	"matrix.works/fmx-gateway/datasource"
 )
 
 func Authenticator(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		urlWhiteList := conf.Cfg.Server.UrlWhiteList
-		urlPrefixWhiteList := conf.Cfg.Server.UrlPrefixWhiteList
-		urlUserAccessList := conf.Cfg.Server.UrlUserAccessList
+		urlWhiteList := conf.Cfg.UrlPermission.UrlWhiteList
+		urlPrefixWhiteList := conf.Cfg.UrlPermission.UrlPrefixWhiteList
+		urlUserAccessList := conf.Cfg.UrlPermission.UrlUserAccessList
 		path := r.URL.Path
 		token := r.Header.Get("X-TOKEN")
 		uid, _ := strconv.Atoi(r.Header.Get("X-UID"))
@@ -45,7 +45,7 @@ func CheckUrlDontNeedAuthenticateForUser(
 	// 1) path在白名单的可以直接访问，2) 访客可以访问非用户关联接口
 	return cutils.ArrayContains(whiteList, path) ||
 		cutils.ArrayPrefixMatch(urlPrefixWhiteList, path) ||
-		(uid == conf.Cfg.Server.GuestUserId && !cutils.ArrayPrefixMatch(urlUserAccessList, path))
+		(uid == conf.Cfg.Misc.GuestUserId && !cutils.ArrayPrefixMatch(urlUserAccessList, path))
 }
 
 func authenticate(uid uint32, token string) bool {
@@ -59,7 +59,7 @@ func authenticate(uid uint32, token string) bool {
 
 func getUserToken(uid uint32) string {
 	token := ""
-	cache := datasource.GetRedisInstance()
+	cache := datasource.GetRedisDefaultInstance()
 	var key = fmt.Sprintf("user_token:%d", uid)
 	results, err := redis.Strings(cache.Do("HMGET", key, "token"))
 	if err != nil {

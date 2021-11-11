@@ -3,17 +3,18 @@
 	ListenAddress = "127.0.0.1"
 	ListenPort = 4000
 	LogFile = "fgw.log"
-	GuestUserId = 0
 
 	SysTimeForm = "2004-08-01 15:04:05"   # 时间转换格式
-	SysTimeFormShort = "2004-08-01"       # 日期转换格式
+	SysDateForm = "2004-08-01"       # 日期转换格式
+	SysTimeZone = "Asia/Shanghai"
+
+	SignSecret = "20190612Shenzhen"
+	CookieSecret = "fimatrix"
 
 	AppId = "fimatrix"
 	AppToken = "fimatrix2020"
 
-	SysTimeLocation = "Asia/Shanghai"
-	SignSecret = "20190612Shenzhen"
-	CookieSecret = "fimatrix"
+[UrlPermission]
 	UrlWhiteList = [
     "/",
     "/system",
@@ -33,23 +34,26 @@
     "/user",
     "/uploading",
 	]
-	[RouteTable]
-    "/user" = "http://localhost:4010/"
-    "/query" = "http://localhost:4020/"
-    "/uploading" = "http://localhost:4040/"    # user file uploader
-    "/market" = "http://localhost:4050/"       # data market
-    # "/search" = "http://localhost:4060/"
-    # "/filter" = "http://localhost:4060/"
-    "/data" = "http://localhost:4060/"
-    "/extdata/index" = "http://localhost:4030/"  # data indexing receiver
-    "/extdata/db" = "http://localhost:4031/"   # database data indexer
-    "/extdata/api" = "http://localhost:4032/"  # 3rd api data indexer
-    "/extdata/ftx" = "http://localhost:4033/"  # file table extractor
-    "/extdata/ft" = "http://localhost:4034/"   # file table indexer
+
+[RouteTable]
+  "/user" = "http://localhost:4010/"
+  "/query" = "http://localhost:4020/"
+  "/uploading" = "http://localhost:4040/"    # user file uploader
+  "/market" = "http://localhost:4050/"       # data market
+  # "/search" = "http://localhost:4060/"
+  # "/filter" = "http://localhost:4060/"
+  "/data" = "http://localhost:4060/"
+  "/extdata/index" = "http://localhost:4030/"  # data indexing receiver
+  "/extdata/db" = "http://localhost:4031/"   # database data indexer
+  "/extdata/api" = "http://localhost:4032/"  # 3rd api data indexer
+  "/extdata/ftx" = "http://localhost:4033/"  # file table extractor
+  "/extdata/ft" = "http://localhost:4034/"   # file table indexer
 
 [redises]
   [redises.default]
 		host = "127.0.0.1"
 		port = 6600
 		database = 0
-		isRunning = true
+
+[misc]
+  GuestUserId = 0
