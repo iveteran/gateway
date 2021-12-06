@@ -46,11 +46,11 @@ func (this *FgwBootstrapper) ParseCommandLine() {
 	this.Bootstrapper.ParseCommandLine(this.CmdOpts.CommandOptions)
 }
 
-func (this *FgwBootstrapper) Serve(addr string) {
+func (this *FgwBootstrapper) Serve(addr string) error {
 	server := &http.Server{
 		Addr: addr,
 	}
 
 	log.Printf("Listening on %s...", addr)
-	server.ListenAndServe()
+	return server.ListenAndServe()
 }

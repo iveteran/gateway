@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"matrix.works/fmx-gateway/bootstrap"
 	"matrix.works/fmx-gateway/conf"
@@ -45,5 +47,9 @@ func main() {
 	app := newApp()
 
 	addr := fmt.Sprintf("%s:%d", conf.Cfg.Server.ListenAddress, conf.Cfg.Server.ListenPort)
-	app.Serve(addr)
+	err := app.Serve(addr)
+	if err != nil {
+		log.Printf("Start server failed: %s\n", err.Error())
+		os.Exit(1)
+	}
 }
