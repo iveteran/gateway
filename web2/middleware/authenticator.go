@@ -19,14 +19,16 @@ func Authenticator(next http.Handler) http.Handler {
 		urlPrefixWhiteList := conf.Cfg.UrlPermission.UrlPrefixWhiteList
 		urlUserAccessList := conf.Cfg.UrlPermission.UrlUserAccessList
 		path := r.URL.Path
-		token := r.Header.Get("X-TOKEN")
 		uid, _ := strconv.Atoi(r.Header.Get("X-UID"))
+		token := r.Header.Get("X-TOKEN")
+		mwxUA := r.Header.Get("MWX-UA")
+		machineId := r.Header.Get("MACHINE-ID")
 
 		if CheckUrlDontNeedAuthenticateForUser(uint32(uid), path,
 			urlWhiteList, urlPrefixWhiteList, urlUserAccessList) {
 			next.ServeHTTP(w, r)
 		} else {
-			pass := authenticate(uint32(uid), token)
+			pass := authenticate(uint32(uid), token, mwxUA, machineId)
 			if pass {
 				log.Printf("%s authorize success", path)
 				next.ServeHTTP(w, r)
@@ -48,25 +50,35 @@ func CheckUrlDontNeedAuthenticateForUser(
 		(uid == conf.Cfg.Misc.GuestUserId && !cutils.ArrayPrefixMatch(urlUserAccessList, path))
 }
 
-func authenticate(uid uint32, token string) bool {
-	savedToken := getUserToken(uid)
-	if savedToken != "" && token != "" && savedToken == token {
+// FIXME(refactor): Call service fmx-user-center or fmx-user-auth to authenticate user
+// It's ugly to get user token and match it here
+func authenticate(uid uint32, token, client, machineId string) bool {
+	savedToken, savedMachineId := getUserSession(uid, client)
+	if (savedToken != "" && token != "" && savedToken == token) &&
+		(savedMachineId == "" || savedMachineId == machineId) {
 		return true
 	} else {
 		return false
 	}
 }
 
-func getUserToken(uid uint32) string {
-	token := ""
+func getUserSession(uid uint32, client string) (string, string) {
+	var key string
+	if client != "" {
+		key = fmt.Sprintf("user_session@%s:%d", client, uid)
+	} else {
+		key = fmt.Sprintf("user_session:%d", uid)
+	}
+
+	var token, machineId string
 	cache := datasource.GetRedisDefaultInstance()
-	var key = fmt.Sprintf("user_token:%d", uid)
-	results, err := redis.Strings(cache.Do("HMGET", key, "token"))
+	results, err := redis.Strings(cache.Do("HMGET", key, "token", "machine_id"))
 	if err != nil {
-		log.Println("GetUserToken error: ", err)
+		log.Println("GetUserSession error: ", err)
 	}
 	if err == nil && len(results) > 0 {
 		token = results[0]
+		machineId = results[1]
 	}
-	return token
+	return token, machineId
 }

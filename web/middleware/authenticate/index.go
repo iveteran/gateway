@@ -18,11 +18,12 @@ func Configure(b *bootstrap.Bootstrapper) {
 	b.Use(func(ctx iris.Context) {
 		whiteList := conf.Cfg.Server.UrlWhiteList
 		path := ctx.Path()
-		token := ctx.GetHeader("X-TOKEN")
 		uid, _ := strconv.Atoi(ctx.GetHeader("X-UID"))
+		token := ctx.GetHeader("X-TOKEN")
+		mwxUA := r.Header.Get("MXW-UA")
 
 		if !cutils.ArrayContains(whiteList, path) {
-			pass := authenticate(uint32(uid), token)
+			pass := authenticate(uint32(uid), token, mwxUA)
 			if pass {
 				ctx.Next()
 			} else {
@@ -35,8 +36,10 @@ func Configure(b *bootstrap.Bootstrapper) {
 	})
 }
 
-func authenticate(uid uint32, token string) bool {
-	savedToken := getUserToken(uid)
+// FIXME(refactor): Call service fmx-user-center or fmx-user-auth to authenticate user
+// It's ugly to get user token and match it here
+func authenticate(uid uint32, token, client string) bool {
+	savedToken := getUserToken(uid, client)
 	if savedToken != "" && token != "" && savedToken == token {
 		return true
 	} else {
@@ -44,10 +47,16 @@ func authenticate(uid uint32, token string) bool {
 	}
 }
 
-func getUserToken(uid uint32) string {
-	token := ""
-	cache := datasource.GetRedisInstance()
-	var key = fmt.Sprintf("user_token:%d", uid)
+func getUserToken(uid uint32, client string) string {
+	var key string
+	if client != "" {
+		key = fmt.Sprintf("user_session@%s:%d", client, uid)
+	} else {
+		key = fmt.Sprintf("user_session:%d", uid)
+	}
+
+	var token string
+	cache := datasource.GetRedisDefaultInstance()
 	results, err := redis.Strings(cache.Do("HMGET", key, "token"))
 	if err != nil {
 		log.Println("GetUserToken error: ", err)
