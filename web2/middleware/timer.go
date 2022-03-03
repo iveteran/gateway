@@ -11,6 +11,6 @@ func TimerHandler(next http.Handler) http.Handler {
 		t0 := time.Now()
 		next.ServeHTTP(w, r)
 		t1 := time.Now()
-		log.Printf("%s cost %v", r.URL.Path, t1.Sub(t0))
+		log.Printf("%s [%s] cost %v", r.URL.Path, r.Method, t1.Sub(t0))
 	})
 }

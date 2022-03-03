@@ -19,6 +19,7 @@ func Authenticator(next http.Handler) http.Handler {
 		urlPrefixWhiteList := conf.Cfg.UrlPermission.UrlPrefixWhiteList
 		urlUserAccessList := conf.Cfg.UrlPermission.UrlUserAccessList
 		path := r.URL.Path
+		method := r.Method
 		uid, _ := strconv.Atoi(r.Header.Get("X-UID"))
 		token := r.Header.Get("X-TOKEN")
 		mwxUA := r.Header.Get("MWX-UA")
@@ -30,10 +31,10 @@ func Authenticator(next http.Handler) http.Handler {
 		} else {
 			pass := authenticate(uint32(uid), token, mwxUA, machineId)
 			if pass {
-				log.Printf("%s authorize success", path)
+				log.Printf("%s [%s] authorize success", path, method)
 				next.ServeHTTP(w, r)
 			} else {
-				log.Printf("%s authorize failed, uid: %d, token: %s", path, uid, token)
+				log.Printf("%s [%s] authorize failed, uid: %d, token: %s", path, method, uid, token)
 				w.WriteHeader(401)
 			}
 		}
