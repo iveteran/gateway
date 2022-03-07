@@ -46,8 +46,8 @@
   "/extdata/index" = "http://localhost:4030/"  # data indexing receiver
   "/extdata/db" = "http://localhost:4031/"   # database data indexer
   "/extdata/api" = "http://localhost:4032/"  # 3rd api data indexer
-  "/extdata/ftx" = "http://localhost:4033/"  # file table extractor
-  "/extdata/ft" = "http://localhost:4034/"   # file table indexer
+  "/extdata/fdtx" = "http://localhost:4033/"  # file data table extractor
+  "/extdata/fdt" = "http://localhost:4034/"   # file data table indexer
 
 [redises]
   [redises.default]
