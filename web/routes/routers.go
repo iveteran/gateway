@@ -1,13 +1,11 @@
 package routes
 
 import (
-	"github.com/kataras/iris"
-
+	"matrix.works/fmx-common/iris"
 	"matrix.works/fmx-gateway/bootstrap"
 )
 
 func Configure(b *bootstrap.Bootstrapper) {
-	println("#### route configure")
 	b.Any("/", index)
 	b.Any("/query/", index)
 	b.Any("/market/", index)

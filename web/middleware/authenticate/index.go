@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/kataras/iris"
 
+	"matrix.works/fmx-common/iris"
 	cutils "matrix.works/fmx-common/utils"
 	"matrix.works/fmx-gateway/bootstrap"
 	"matrix.works/fmx-gateway/conf"

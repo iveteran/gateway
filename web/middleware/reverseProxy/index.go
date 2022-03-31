@@ -7,8 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/kataras/iris"
-
+	"matrix.works/fmx-common/iris"
 	"matrix.works/fmx-gateway/bootstrap"
 	"matrix.works/fmx-gateway/conf"
 )
