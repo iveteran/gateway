@@ -22,6 +22,7 @@
     "/user/register",
     "/user/register_confirm",
     "/user/exists",
+    "/user/email_exists",
     "/user/require_authcode",
     "/user/verify_authcode",
     "/user/reset_password",
