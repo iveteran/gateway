@@ -2,18 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
-	appAuth "matrix.works/fmx-common/web/middleware/authenticate"
-	"matrix.works/fmx-gateway/bootstrap"
-	"matrix.works/fmx-gateway/conf"
-	//userAuth "matrix.works/fmx-gateway/web/middleware/authenticate"
-	"matrix.works/fmx-gateway/web/middleware/reverseProxy"
-	"matrix.works/fmx-gateway/web/routes"
+	"matrix.works/gateway/bootstrap"
+	"matrix.works/gateway/conf"
+	"matrix.works/gateway/web/route"
 )
 
 const (
-	APP_NAME  = "fgw"
-	APP_OWNER = "Matrixworks(ShenZhen) Information Technologies Co.,Ltd."
+	AppName  = "fgw"
+	AppOwner = "Matrixworks(ShenZhen) Information Technologies Co.,Ltd."
 )
 
 var (
@@ -21,14 +20,12 @@ var (
 	BuildNo string = "unknown"
 )
 
-var appTokens = map[string]string{"fimatrix": "fimatrix2020"} // TODO: load from configure file
+var appTokens = map[string]string{"your-app-name": "your-app-token"} // TODO: load from configure file
 
 func newApp() *bootstrap.FgwBootstrapper {
-	/// 初始化应用
-
 	app := bootstrap.New(
-		APP_NAME,
-		APP_OWNER,
+		AppName,
+		AppOwner,
 		Version,
 		BuildNo,
 		appTokens,
@@ -39,21 +36,20 @@ func newApp() *bootstrap.FgwBootstrapper {
 
 	app.Bootstrap()
 
-	app.Configure(
-		reverseProxy.Configure,
-		appAuth.Configure,
-		//userAuth.Configure,
-		routes.Configure,
-	)
+	routeMap := conf.Cfg.RouteTable
+	fmt.Printf("route table: %+v\n", routeMap)
+	route.Setup(routeMap)
 
 	return app
 }
 
 func main() {
-	fmt.Printf("注意：这个方案没有完成，暂时不可用, 请使用web2的方案, 本程序将退出!\n")
-	return
 	app := newApp()
 
-	address := fmt.Sprintf("%s:%d", conf.Cfg.Server.ListenAddress, conf.Cfg.Server.ListenPort)
-	app.Listen(address)
+	addr := fmt.Sprintf("%s:%d", conf.Cfg.Server.ListenAddress, conf.Cfg.Server.ListenPort)
+	err := app.Serve(addr)
+	if err != nil {
+		log.Printf("Start server failed: %s\n", err.Error())
+		os.Exit(1)
+	}
 }

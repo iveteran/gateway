@@ -7,8 +7,8 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	"matrix.works/fmx-gateway/conf"
-	"matrix.works/fmx-gateway/web2/middleware"
+	"matrix.works/gateway/conf"
+	"matrix.works/gateway/web/middleware"
 )
 
 type RequestHandler func(http.ResponseWriter, *http.Request)

@@ -2,11 +2,9 @@ package conf
 
 import (
 	"log"
-
-	"matrix.works/fmx-common/conf"
 )
 
-var Cfg *MyConfig
+var Cfg *FgwConfig
 
 type UrlPermission struct {
 	UrlWhiteList       []string
@@ -19,21 +17,21 @@ type Misc struct {
 	GuestUserId uint32
 }
 
-type MyConfig struct {
-	conf.FmxConfig
+type FgwConfig struct {
+	Config
 	UrlPermission UrlPermission
 	RouteTable    map[string]string
 	Misc          Misc
 }
 
-func CreateGlobalConfig(filename string, logger *log.Logger) *MyConfig {
-	Cfg = &MyConfig{
-		FmxConfig: conf.FmxConfig{
+func CreateGlobalConfig(filename string, logger *log.Logger) *FgwConfig {
+	Cfg = &FgwConfig{
+		Config: Config{
 			FilePath: filename,
 		},
 	}
-	conf.Cfg = &Cfg.FmxConfig
-	conf.LoadConfig(filename, Cfg, logger)
-	conf.CheckRequiredOptions()
+	BaseCfg = &Cfg.Config
+	LoadConfig(filename, Cfg, logger)
+	CheckRequiredOptions()
 	return Cfg
 }

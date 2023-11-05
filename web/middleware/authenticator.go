@@ -8,9 +8,9 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 
-	"matrix.works/fmx-common/datasource"
-	cutils "matrix.works/fmx-common/utils"
-	"matrix.works/fmx-gateway/conf"
+	"matrix.works/gateway/conf"
+	"matrix.works/gateway/datasource"
+	"matrix.works/gateway/utils"
 )
 
 func Authenticator(next http.Handler) http.Handler {
@@ -46,9 +46,9 @@ func CheckUrlDontNeedAuthenticateForUser(
 	whiteList, urlPrefixWhiteList, urlUserAccessList []string,
 ) bool {
 	// 1) path在白名单的可以直接访问，2) 访客可以访问非用户关联接口
-	return cutils.ArrayContains(whiteList, path) ||
-		cutils.ArrayPrefixMatch(urlPrefixWhiteList, path) ||
-		(uid == conf.Cfg.Misc.GuestUserId && !cutils.ArrayPrefixMatch(urlUserAccessList, path))
+	return utils.ArrayContains(whiteList, path) ||
+		utils.ArrayPrefixMatch(urlPrefixWhiteList, path) ||
+		(uid == conf.Cfg.Misc.GuestUserId && !utils.ArrayPrefixMatch(urlUserAccessList, path))
 }
 
 // FIXME(refactor): Call service fmx-user-center or fmx-user-auth to authenticate user
