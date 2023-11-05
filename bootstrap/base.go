@@ -44,7 +44,7 @@ func NewBootstrapper(appName, appOwner, appVersion, appBuildNo string,
 	tokenTable map[string]string, cfgList ...Configurator,
 ) *Bootstrapper {
 
-	filePath := fmt.Sprintf("./fmx_%s.log", appName)
+	filePath := fmt.Sprintf("./%s.log", appName)
 	logger := mylog.CreateFileLogger(appName, filePath) // TODO: use iris logger
 	b := &Bootstrapper{
 		Application:  iris.New(),
